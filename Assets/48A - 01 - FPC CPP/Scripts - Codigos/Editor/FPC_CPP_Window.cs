@@ -45,7 +45,7 @@ public class FPC_CPP_Window : EditorWindow
             return _fuentePersonalizada;
         }
 #if UNITY_EDITOR
-        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A - 01 FPS-CPP" });
+        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A - 01 FPC CPP" });
         if (guids.Length > 0)
         {
             string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -190,7 +190,7 @@ public class FPC_CPP_Window : EditorWindow
         ActualizarListaJSON();
 
         wantsMouseMove = true;
-        titleContent = new GUIContent(ES ? "CPP — Inspector" : "FPC — Inspector");
+        titleContent = new GUIContent(ES ? "FPC CPP — Window Inspector" : "FPC CPP — Window Inspector");
 
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
 
@@ -3904,7 +3904,7 @@ public class FPC_CPPMiniEditor : UnityEditor.Editor
         Font[] fuentes = Resources.LoadAll<Font>("Dico");
         if (fuentes != null && fuentes.Length > 0) { _fuente = fuentes[0]; return _fuente; }
 #if UNITY_EDITOR
-        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A - 01 FPS-CPP" });
+        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A - 01 - FPC CPP" });
         if (guids.Length > 0)
             _fuente = UnityEditor.AssetDatabase.LoadAssetAtPath<Font>(UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
 #endif
@@ -3954,7 +3954,7 @@ public class FPC_CPPMiniEditor : UnityEditor.Editor
         EditorGUI.DrawRect(new Rect(2f, 258f, Screen.width - 4f, 1f), new Color(0.95f, 0.95f, 1f, 1f));
         GUILayout.Space(14);
 
-        GUILayout.Label(es ? " CPP — Controlador Primera Persona" : " FPC — First Person Controller", stTitulo);
+        GUILayout.Label(es ? " CPP - Controlador Primera Persona" : " FPC - First Person Controller", stTitulo);
 
         GUILayout.Space(6);
         GUILayout.Label(es ? "Abre la Window Inspector para configurar este asset." : "Open the full Window Inspector to configure this asset.", stSub);
@@ -3963,7 +3963,7 @@ public class FPC_CPPMiniEditor : UnityEditor.Editor
 
         Color ca = GUI.backgroundColor;
         GUI.backgroundColor = new Color(0.15f, 0.45f, 0.85f, 1f);
-        if (GUILayout.Button(es ? "Abrir la Window Inspector del CPP FPC " : "Open the Window Inspector for the CPP FPC", stBoton, GUILayout.Height(32)))
+        if (GUILayout.Button(es ? "Abrir la Window Inspector del FPC CPP " : "Open the Window Inspector for the FPC CPP", stBoton, GUILayout.Height(32)))
         {
             FPC_CPP_Window.AbrirConAsset((PlayerConfiguration_ConfiguracionDelJugador)target);
         }
