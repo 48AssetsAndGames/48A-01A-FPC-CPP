@@ -2,7 +2,10 @@
 using UnityEditor;
 using System.Collections.Generic;
 using System.IO;
+using FPC_CPP.Runtime;
     
+namespace FPC_CPP.Editor
+{ 
 public class FPC_CPP_Window : EditorWindow
 {
     private static FPC_CPP_Window _instancia;
@@ -154,7 +157,7 @@ public class FPC_CPP_Window : EditorWindow
     #region APERTURA  /  WINDOW OPEN
     // ════════════════════════════════════════════════════════════════════════════════════════════
 
-    [MenuItem("FPC CPP Window / Window Inspector")]
+    [MenuItem("Tools / 48AssetsAndGames / FPC CPP / Window Inspector")]
     public static void AbrirVentana()
     {
         _instancia = GetWindow<FPC_CPP_Window>(false, "FPC - CPP Window Inspector", true);
@@ -3887,7 +3890,7 @@ public class FPC_CPP_Window : EditorWindow
 
 
 [UnityEditor.CustomEditor(typeof(PlayerConfiguration_ConfiguracionDelJugador))]
-public class FPCMiniEditor : UnityEditor.Editor
+public class FPC_CPPMiniEditor : UnityEditor.Editor
 {
     private const string PREF_IDIOMA = "CPPFPC_Idioma";
 
@@ -3982,4 +3985,5 @@ public class FPCMiniEditor : UnityEditor.Editor
 
         GUILayout.Space(6);
     }
+}
 }

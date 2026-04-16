@@ -23,90 +23,94 @@
 
 using UnityEngine;
 using UnityEditor;
+using FPC_CPP.Runtime;
 
-[InitializeOnLoad]
-public static class PlayerControllerSetup_ControladorDelJugadorSetup
+
+namespace FPC_CPP.Editor
 {
-    // ═══════════════════════════════════════════════════════════════════════════════════════════
-    #region INICIALIZACIÓN / INITIALIZATION
-    // ═══════════════════════════════════════════════════════════════════════════════════════════
-
-    static PlayerControllerSetup_ControladorDelJugadorSetup()
+    [InitializeOnLoad]
+    public static class PlayerControllerSetup_ControladorDelJugadorSetup
     {
-        RegisterGamepadAxesIfMissing();
-    }
+        // ═══════════════════════════════════════════════════════════════════════════════════════════
+        #region INICIALIZACIÓN / INITIALIZATION
+        // ═══════════════════════════════════════════════════════════════════════════════════════════
 
-    #endregion
-    // ═══════════════════════════════════════════════════════════════════════════════════════════
-
-
-    // ═══════════════════════════════════════════════════════════════════════════════════════════
-    #region REGISTRO DE EJES / AXIS REGISTRATION
-    // ═══════════════════════════════════════════════════════════════════════════════════════════
-
-    [MenuItem("FPC - CPP / Register Gamepad Axes - Registrar Ejes del Mando")]
-    public static void RegisterGamepadAxesIfMissing() 
-    {
-        var inputManagerAsset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset");
-        if (inputManagerAsset.Length == 0)
+        static PlayerControllerSetup_ControladorDelJugadorSetup()
         {
-            Debug.LogWarning("[PlayerController_ControladorDelJugador] InputManager.asset not found. Gamepad axes were not registered.");
-            return;
+            RegisterGamepadAxesIfMissing();
         }
 
-        var inputManager = new SerializedObject(inputManagerAsset[0]);
-        var axesProperty = inputManager.FindProperty("m_Axes");
+        #endregion
+        // ═══════════════════════════════════════════════════════════════════════════════════════════
 
-        bool huboCambios = false;
-        huboCambios |= RegisterAxis(axesProperty, "RSHorizontal", 4, false);
-        huboCambios |= RegisterAxis(axesProperty, "RSVertical", 5, true);
-        huboCambios |= RegisterAxis(axesProperty, "DpadHorizontal", 6, false);
-        huboCambios |= RegisterAxis(axesProperty, "DpadVertical", 7, true);
 
-        huboCambios |= RegisterAxis(axesProperty, "LT", 9, false);
-        huboCambios |= RegisterAxis(axesProperty, "RT", 10, false);
+        // ═══════════════════════════════════════════════════════════════════════════════════════════
+        #region REGISTRO DE EJES / AXIS REGISTRATION
+        // ═══════════════════════════════════════════════════════════════════════════════════════════
 
-        if (huboCambios)
+        [MenuItem("Tools / 48AssetsAndGames / FPC CPP / Register Gamepad Axes - Registrar Ejes del Mando")]
+        public static void RegisterGamepadAxesIfMissing()
         {
-            inputManager.ApplyModifiedProperties();
-            Debug.Log("[PlayerController_ControladorDelJugador] Gamepad axes successfully registered in the Input Manager.");
+            var inputManagerAsset = AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/InputManager.asset");
+            if (inputManagerAsset.Length == 0)
+            {
+                Debug.LogWarning("[PlayerController_ControladorDelJugador] InputManager.asset not found. Gamepad axes were not registered.");
+                return;
+            }
+
+            var inputManager = new SerializedObject(inputManagerAsset[0]);
+            var axesProperty = inputManager.FindProperty("m_Axes");
+
+            bool huboCambios = false;
+            huboCambios |= RegisterAxis(axesProperty, "RSHorizontal", 4, false);
+            huboCambios |= RegisterAxis(axesProperty, "RSVertical", 5, true);
+            huboCambios |= RegisterAxis(axesProperty, "DpadHorizontal", 6, false);
+            huboCambios |= RegisterAxis(axesProperty, "DpadVertical", 7, true);
+
+            huboCambios |= RegisterAxis(axesProperty, "LT", 9, false);
+            huboCambios |= RegisterAxis(axesProperty, "RT", 10, false);
+
+            if (huboCambios)
+            {
+                inputManager.ApplyModifiedProperties();
+                Debug.Log("[PlayerController_ControladorDelJugador] Gamepad axes successfully registered in the Input Manager.");
+            }
         }
-    }
 
 
-    private static bool RegisterAxis(SerializedProperty axesProperty, string name, int joyAxisNum, bool inverted)
-    {
-
-        for (int i = 0; i < axesProperty.arraySize; i++)
+        private static bool RegisterAxis(SerializedProperty axesProperty, string name, int joyAxisNum, bool inverted)
         {
-            if (axesProperty.GetArrayElementAtIndex(i).FindPropertyRelative("m_Name").stringValue == name)
-                return false;
+
+            for (int i = 0; i < axesProperty.arraySize; i++)
+            {
+                if (axesProperty.GetArrayElementAtIndex(i).FindPropertyRelative("m_Name").stringValue == name)
+                    return false;
+            }
+
+            axesProperty.arraySize++;
+            var eje = axesProperty.GetArrayElementAtIndex(axesProperty.arraySize - 1);
+
+            eje.FindPropertyRelative("m_Name").stringValue = name;
+            eje.FindPropertyRelative("descriptiveName").stringValue = "";
+            eje.FindPropertyRelative("descriptiveNegativeName").stringValue = "";
+            eje.FindPropertyRelative("negativeButton").stringValue = "";
+            eje.FindPropertyRelative("positiveButton").stringValue = "";
+            eje.FindPropertyRelative("altNegativeButton").stringValue = "";
+            eje.FindPropertyRelative("altPositiveButton").stringValue = "";
+            eje.FindPropertyRelative("gravity").floatValue = 0f;
+            eje.FindPropertyRelative("dead").floatValue = 0.19f;
+            eje.FindPropertyRelative("sensitivity").floatValue = 1f;
+            eje.FindPropertyRelative("snap").boolValue = false;
+            eje.FindPropertyRelative("invert").boolValue = inverted;
+            eje.FindPropertyRelative("type").intValue = 2;
+            eje.FindPropertyRelative("axis").intValue = joyAxisNum - 1;
+            eje.FindPropertyRelative("joyNum").intValue = 0;
+
+            return true;
         }
 
-        axesProperty.arraySize++;
-        var eje = axesProperty.GetArrayElementAtIndex(axesProperty.arraySize - 1);
-
-        eje.FindPropertyRelative("m_Name").stringValue = name;
-        eje.FindPropertyRelative("descriptiveName").stringValue = "";
-        eje.FindPropertyRelative("descriptiveNegativeName").stringValue = "";
-        eje.FindPropertyRelative("negativeButton").stringValue = "";
-        eje.FindPropertyRelative("positiveButton").stringValue = "";
-        eje.FindPropertyRelative("altNegativeButton").stringValue = "";
-        eje.FindPropertyRelative("altPositiveButton").stringValue = "";
-        eje.FindPropertyRelative("gravity").floatValue = 0f;
-        eje.FindPropertyRelative("dead").floatValue = 0.19f;
-        eje.FindPropertyRelative("sensitivity").floatValue = 1f;
-        eje.FindPropertyRelative("snap").boolValue = false;
-        eje.FindPropertyRelative("invert").boolValue = inverted;
-        eje.FindPropertyRelative("type").intValue = 2;   
-        eje.FindPropertyRelative("axis").intValue = joyAxisNum - 1;
-        eje.FindPropertyRelative("joyNum").intValue = 0;    
-
-        return true;
+        #endregion
+        // ═══════════════════════════════════════════════════════════════════════════════════════════
     }
-
-    #endregion
-    // ═══════════════════════════════════════════════════════════════════════════════════════════
 }
-
 #endif
