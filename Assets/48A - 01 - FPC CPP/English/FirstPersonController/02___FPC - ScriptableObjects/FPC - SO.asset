@@ -54,7 +54,7 @@ MonoBehaviour:
   ExtraForcePerSecondOfTheVariableJump: 15
   LayersThatAreConsideredGround:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 72
   RadiusOfTheGroundDetectionOverlapSphere: 0.25
   DownwardOffsetOfTheGroundDetectionOverlapSphere: 0.05
   EnableCoyoteTime: 1

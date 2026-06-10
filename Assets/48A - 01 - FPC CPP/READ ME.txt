@@ -2,9 +2,19 @@ EN:
 
 Welcome to my first Asset. It’s something very simple, but I hope it will be helpful to everyone who uses it.
 
-In the first folder of the Asset, you’ll find a directly usable prefab. Even so, I strongly recommend that you 
-take a look at the documentation, not necessarily the technical one, but the one about how to use the Asset 
-itself (48A - 01 FPC-CPP\English\FirstPersonController\04___Documentation\CPP FPC_How To_Use_V1.0_EN).
+In the first folder of the Asset, you’ll find a directly usable prefab(Remember to assign the your Layers in 
+"Layers That Are Considered Ground" inside Base Mechanics on Module 04). 
+
+
+
+
+
+
+
+
+Even so, I strongly recommend that you take a look at the documentation, not necessarily the technical one, 
+but the one about how to use the Asset itself 
+(48A - 01 FPC-CPP\English\FirstPersonController\04___Documentation\CPP FPC_How To_Use_V1.0_EN).
 You’ll also see that I made a test scene and that, at the same time, you already have 2 Configs ready to try, 
 such as the Arcade one or the "Terror" one, to show the scope of this Asset.
 

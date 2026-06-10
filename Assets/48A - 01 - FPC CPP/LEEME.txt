@@ -2,9 +2,21 @@ ES:
 
 Bienvenido a mi primer Asset. Es algo muy sencillo, pero espero que sea de ayuda para todos los que lo usen.
 
-En la primera carpeta del Asset encontrarás directamente un prefab utilizable. Aun así, te recomiendo
-encarecidamente que eches un ojo a la documentación, no a la técnica necesariamente, sino a la de cómo utilizar
-el propio Asset(48A - 01 FPC-CPP\Español\ControladorPrimeraPersona\04___Documentacion\CPP FPC_Como Usar_V1.0_ES).
+En la primera carpeta del Asset encontrarás directamente un prefab utilizable(Recuerda asignar las Layers en 
+"Capas Que Se Consideran Suelo" dentro de las Mecanicas Base, en el Modulo 04, deben coincidir con las Layers que 
+le asignas a tus suelos). 
+
+
+
+
+
+
+
+
+
+Aun así, te recomiendo encarecidamente que eches un ojo a la documentación, no a la técnica necesariamente, 
+sino a la de cómo utilizar el propio Asset
+(48A - 01 FPC-CPP\Español\ControladorPrimeraPersona\04___Documentacion\CPP FPC_Como Usar_V1.0_ES).
 Igual verás que he hecho una escena de prueba y que, a la par, ya tienes 2 Configs listos para probar, como el de
 Arcade o el de "Terror" para mostrar el alcance de este Asset.
 
