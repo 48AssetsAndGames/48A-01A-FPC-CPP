@@ -1,5 +1,4 @@
-﻿
-// ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+﻿// ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
 // PLAYER CONTROLLER  /  CONTROLADOR DEL JUGADOR 
 // ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
 //
@@ -238,6 +237,14 @@ namespace FPC_CPP.Runtime
         // En: True if the player is currently in contact with the ground according to the OverlapSphere.
         // Es: True si el jugador está en contacto con el suelo según el OverlapSphere.
         private bool _playerIsOnGround = false;
+
+
+        // En: Ground mask actually used at runtime. Built from LAYER NAMES (not indices) so it works
+        //     in any project, and the player's own layer is always excluded to avoid self-detection.
+        // Es: Máscara de suelo que se usa realmente en runtime. Se construye a partir de los NOMBRES de
+        //     las capas (no de los índices) para que funcione en cualquier proyecto, y siempre excluye
+        //     la capa del propio jugador para evitar la auto-detección.
+        private int _effectiveGroundMask;
 
 
         // En: Ground contact state from the previous frame.
@@ -594,6 +601,10 @@ namespace FPC_CPP.Runtime
             _playerIsOnGround = true;
             _remainingJumps = Configuration_Configuracion.HowManyJumps;
 
+            // En: Build the ground mask by name + exclude the player's own layer (portable across projects).
+            // Es: Construye la máscara de suelo por nombre + excluye la capa del propio jugador (portable entre proyectos).
+            BuildEffectiveGroundMask();
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -696,12 +707,54 @@ namespace FPC_CPP.Runtime
         // ═══════════════════════════════════════════════════════════════════════════════════════════
 
 
+        // En: Names of the layers treated as ground. Resolved at runtime so the mask is correct in ANY
+        //     project regardless of layer indices. Add your own layer names here if you need more
+        //     (e.g. "Terrain", "StaticGeometry"). Do NOT add the player's layer.
+        //     Public so the editor window can reuse the SAME list when re-resolving the mask.
+        // Es: Nombres de las capas consideradas suelo. Se resuelven en runtime para que la máscara sea
+        //     correcta en CUALQUIER proyecto sin importar los índices. Añade aquí tus propios nombres de
+        //     capa si necesitas más (p. ej. "Terrain", "StaticGeometry"). NO añadas la capa del jugador.
+        //     Es público para que la ventana del editor reutilice la MISMA lista al re-resolver la máscara.
+        public static readonly string[] GroundLayerNames = { "Ground", "Suelo" };
+
+        // En: Rebuilds the runtime ground mask. Call again if you change the player's layer at runtime.
+        // Es: Reconstruye la máscara de suelo en runtime. Vuelve a llamarla si cambias la capa del jugador en runtime.
+        public void BuildEffectiveGroundMask()
+        {
+            int mask = 0;
+
+            // En: 1) Rebuild from layer NAMES → portable across projects.
+            // Es: 1) Reconstruir a partir de los NOMBRES de capa → portable entre proyectos.
+            foreach (string layerName in GroundLayerNames)
+            {
+                int layerIndex = LayerMask.NameToLayer(layerName);
+                if (layerIndex != -1) mask |= 1 << layerIndex;
+            }
+
+            // En: 2) If no named ground layer exists, fall back to the serialized LayerMask.
+            // Es: 2) Si no existe ninguna capa de suelo con esos nombres, usar el LayerMask serializado.
+            if (mask == 0 && Configuration_Configuracion != null)
+                mask = Configuration_Configuracion.LayersThatAreConsideredGround.value;
+
+            // En: 3) ALWAYS exclude the player's own layer (prevents self-detection that breaks jumping).
+            // Es: 3) SIEMPRE excluir la capa del propio jugador (evita la auto-detección que rompe el salto).
+            mask &= ~(1 << gameObject.layer);
+
+            _effectiveGroundMask = mask;
+
+            if (_effectiveGroundMask == 0)
+                Debug.LogWarning("[PlayerController] No se encontró ninguna capa de suelo válida. " +
+                    "Crea una capa llamada \"Ground\" y asigna tu piso/terreno a ella, " +
+                    "o añade su nombre al array GroundLayerNames. / No valid ground layer found.", this);
+        }
+
+
         private void GroundDetection()
         {
             _playerWasOnGroundLastFrame = _playerIsOnGround;
 
             Vector3 detectionPoint = transform.position + Vector3.down * Configuration_Configuracion.DownwardOffsetOfTheGroundDetectionOverlapSphere;
-            _playerIsOnGround = Physics.CheckSphere(detectionPoint, Configuration_Configuracion.RadiusOfTheGroundDetectionOverlapSphere, Configuration_Configuracion.LayersThatAreConsideredGround, QueryTriggerInteraction.Ignore);
+            _playerIsOnGround = Physics.CheckSphere(detectionPoint, Configuration_Configuracion.RadiusOfTheGroundDetectionOverlapSphere, _effectiveGroundMask, QueryTriggerInteraction.Ignore);
 
             if (_playerIsOnGround && !_playerWasOnGroundLastFrame)
                 OnLanding();
@@ -1878,7 +1931,7 @@ namespace FPC_CPP.Runtime
             _playerRigidbody.AddForce(-horizontalVelocity * Configuration_Configuracion.FrictionDuringPhysicalSliding, ForceMode.Acceleration);
 
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, Configuration_Configuracion.CapsuleColliderHeightWhileStanding, Configuration_Configuracion.LayersThatAreConsideredGround))
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, Configuration_Configuracion.CapsuleColliderHeightWhileStanding, _effectiveGroundMask))
             {
                 Vector3 surfaceNormal = hit.normal;
                 Vector3 slopeDirection = Vector3.ProjectOnPlane(Vector3.down, surfaceNormal).normalized;
