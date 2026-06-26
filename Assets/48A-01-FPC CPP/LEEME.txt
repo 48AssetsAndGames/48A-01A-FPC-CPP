@@ -16,7 +16,7 @@ le asignas a tus suelos).
 
 Aun así, te recomiendo encarecidamente que eches un ojo a la documentación, no a la técnica necesariamente, 
 sino a la de cómo utilizar el propio Asset
-(48A - 01 FPC-CPP\Español\ControladorPrimeraPersona\04___Documentacion\CPP FPC_Como Usar_V1.0_ES).
+(48A-01-FPC_CPP\Español\ControladorPrimeraPersona\04___Documentacion\CPP FPC_Como Usar_V1.0_ES).
 Igual verás que he hecho una escena de prueba y que, a la par, ya tienes 2 Configs listos para probar, como el de
 Arcade o el de "Terror" para mostrar el alcance de este Asset.
 
@@ -62,7 +62,7 @@ Bendiciones. :)
 
 
 
-(POR FAVOR NO renombres las carpetas "48A - 01 - FPC CPP" ni "Configs", pues la Window las requiere así para poder 
+(POR FAVOR NO renombres las carpetas "48A-01-FPC_CPP" ni "Configs", pues la Window las requiere así para poder 
 guardar/cargar/eliminar las configs que hagas o las que ya existen. Eso sí, SÍ puedes mover la carpeta entera a 
 donde te plazca, siempre y cuando esté dentro de Assets/ así que no lo muevas a Packages).
 

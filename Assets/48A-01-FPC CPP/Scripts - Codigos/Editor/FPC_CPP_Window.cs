@@ -45,7 +45,7 @@ namespace FPC_CPP.Editor
                 return _fuentePersonalizada;
             }
 #if UNITY_EDITOR
-            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A - 01 FPC CPP" });
+            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A-01FPC_CPP" });
             if (guids.Length > 0)
             {
                 string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
@@ -128,9 +128,9 @@ namespace FPC_CPP.Editor
 
         internal string NombreNuevoJSON = "";
         internal List<string> ArchivosJSON = new List<string>();
-        private const string CARPETA_JSON_FALLBACK = "Assets/48A - 01 - FPC CPP/Configs";
+        private const string CARPETA_JSON_FALLBACK = "Assets/48A-01-FPC_CPP/Configs";
         private const string NOMBRE_CARPETA_CONFIGS = "Configs";
-        private const string NOMBRE_CARPETA_PADRE = "48A - 01 - FPC CPP";
+        private const string NOMBRE_CARPETA_PADRE = "48A-01-FPC_CPP";
 
         internal static string ObtenerCarpetaJSON()
         {
@@ -444,7 +444,7 @@ namespace FPC_CPP.Editor
             float cx = position.width * 0.5f;
             float cy = position.height * 0.5f;
 
-            string titulo = "                           48A - 01 FPS-CPP\n\n";
+            string titulo = "                           48A-01-FPC_CPP\n\n";
             string sub = ES ? "Assign a PlayerConfiguration_ConfiguracionDelJugador asset to begin\n\n" +
                               "Asigna un asset PlayerConfiguration_ConfiguracionDelJugador para comenzar"
                             : "Asigna un asset PlayerConfiguration_ConfiguracionDelJugador para comenzar\n\n" +
@@ -3935,7 +3935,7 @@ namespace FPC_CPP.Editor
             Font[] fuentes = Resources.LoadAll<Font>("Dico");
             if (fuentes != null && fuentes.Length > 0) { _fuente = fuentes[0]; return _fuente; }
 #if UNITY_EDITOR
-            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A - 01 - FPC CPP" });
+            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:Font", new[] { "Assets/48A-01-FPC_CPP" });
             if (guids.Length > 0)
                 _fuente = UnityEditor.AssetDatabase.LoadAssetAtPath<Font>(UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]));
 #endif
